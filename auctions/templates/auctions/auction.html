@@ -1,0 +1,113 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+
+{% block css %}
+
+    <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+
+{% block body %}
+
+    <h2>Listing: {{ auction.name }}</h2>
+    
+
+    <div>
+        <img src = "{{ auction.photo }}" alt="auction photo">
+    </div>
+
+    <p>{{ auction.description }}</p>
+
+    <p>{{ auction.bids.last }} MAD</p>
+
+    <p>{{ auction.bids.count }} bid(s) so far</p>
+
+    {% if user.is_authenticated %}
+
+        {% if auction.winner == user %} <!--if the current user is the auction.winner-->
+
+            <p>Congratulations, you have won this auction</p>
+
+        {% endif %}
+
+        {% if auction.isClosed == 'TRUE' %}
+
+            <p>This auction is closed and has been won by {{auction.winner.username}}</p>
+
+        {% else %}
+
+            
+            {% if user.username == last_bid_owner.username %} <!--If the last bid the current auction has the current user as its bidder-->
+                <p>Your bid is the current bid</p>
+            {% endif %}
+
+            {% if auction.owner.username != user.username %} <!--If the current user is not the owner of the current auction-->
+
+                
+
+                <form action = "{% url 'auction' auction.id %}" method = "post">
+                    {% csrf_token %}
+
+                    <input type="number" placeholder="Place a bid" name = "price">
+                    <input type="submit">
+
+                </form>
+
+            {% else %}
+
+                <p>This is your listing</p>
+
+                <form action = "{% url 'close' auction.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit">
+                </form>
+
+            {% endif %}
+
+        
+        {% endif %}
+
+        <p>
+            Details
+        </p>
+
+        <ul>
+            <li>listed by {{ auction.owner }}</li>
+            <li>Category: {{ category.name }}</li>
+        </ul>
+
+    {% endif %}
+
+    {% if auction.isClosed == 'FALSE' %}
+
+
+        {% if isWatchlist == False %}
+            <p>Add this auction listing to your watchlist</p>
+            <form action = "{% url 'add_watchlist' auction.id %}" method = "post">
+                {% csrf_token %}
+                <input type="submit">
+            </form>
+        {% endif %}
+
+        <p>Add a comment here</p>
+
+        <form action = "{% url 'comment' auction.id %}" method = "post">
+            {% csrf_token %}
+            <input type="text" placeholder="your comment" name = "content">
+            <input type="submit">
+        </form>
+
+    {% endif %}
+
+    <p>List of Comments</p>
+
+    <ul>
+        {% for comment in comments %}
+            <li>{{ comment }}</li>
+        {% empty %}
+            <li>No Comments</li>
+        {% endfor %}
+    </ul> 
+ 
+{% endblock %}

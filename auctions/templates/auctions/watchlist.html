@@ -1,0 +1,51 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+    <br>
+    <style>
+
+        h3{
+            color:darkblue;
+        }
+        
+        #card{
+            border: 1px;
+            border-style: solid;
+            display:flex;
+            column-gap: 5em;
+            padding: 10px;
+            margin: 0 -5px
+        }
+        #image{
+            height: 200px;
+            width: 180px;
+            margin-right: 20px;
+        }
+    </style>
+
+    {% for auction in auctions %}
+
+        
+        <h3>{{ auction.name }}</h3>
+        <div id = "card" >
+            
+            <div>
+                <img id = "image" src = "{{auction.photo}}" alt="auction photo" >
+            </div>
+            <div>
+                <p>{{auction.description}}</p>
+                <p>Price: {{ auction.bids.last }}</p>
+            </div>
+        </div>
+        <a href = "{% url 'auction' auction.id %}">Click Here for more info</a>
+
+        <br>
+        <br>
+        <br>
+        
+    {% empty %}
+        No Active Listings
+    {% endfor %}
+{% endblock %}

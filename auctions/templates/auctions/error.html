@@ -1,0 +1,16 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+
+{% block css %}
+
+    <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+
+{% block body %}
+
+<h1>the previous bid is higher than your bid</h1>
+
+<a href = "{% url 'auction' auction_id %}">Go back to previous page</a>
+{% endblock %}

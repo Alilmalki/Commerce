@@ -1,0 +1,38 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+
+{% block css %}
+
+    <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block body %}
+
+    <ul>
+        {% for category in categories %}
+
+            <li >
+                <a href = "{% url 'auction_by_category' category.name %}">{{ category.name }}</a>
+            </li>
+
+        {% endfor %}
+    </ul>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
